@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package invoice.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+
+service InvoiceService {
+  rpc CreateInvoice(CreateInvoiceRequest) returns (CreateInvoiceResponse) {
+    option (google.api.http) = {
+      post: "/v1/invoices",
+      body: "*",
+    };
+  }
+
+  rpc GetInvoice(GetInvoiceRequest) returns (GetInvoiceResponse) {
+    option (google.api.http) = {get: "/v1/invoices/{id}"};
+  }
+
+  rpc UpdateInvoice(UpdateInvoiceRequest) returns (UpdateInvoiceResponse) {
+    option (google.api.http) = {
+      put: "/v1/invoices/{invoice.id}",
+      body: "*",
+    };
+  }
+
+  rpc DeleteInvoice(DeleteInvoiceRequest) returns (DeleteInvoiceResponse) {
+    option (google.api.http) = {delete: "/v1/invoices/{id}"};
+  }
+
+  rpc ListInvoices(ListInvoicesRequest) returns (ListInvoicesResponse) {
+    option (google.api.http) = {get: "/v1/invoices"};
+  }
+}
+
+message Invoice {
+  string id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string order_id = 2;
+  string total_amount = 3;
+  string paid_amount = 4;
+  google.protobuf.Timestamp due_date = 5;
+  google.protobuf.Timestamp payment_date = 6;
+  bool paid = 7;
+  repeated InvoiceItem items = 8;
+}
+
+message InvoiceItem {
+  string id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string invoice_id = 2;
+  string product_id = 3;
+  int32 quantity = 4;
+  string unit_price = 5;
+  string total_cost = 6;
+}
+
+message CreateInvoiceRequest {
+  Invoice invoice = 1;
+}
+
+message CreateInvoiceResponse {
+  Invoice invoice = 1;
+}
+
+message GetInvoiceRequest {
+  string id = 1;
+}
+
+message GetInvoiceResponse {
+  Invoice invoice = 1;
+}
+
+message UpdateInvoiceRequest {
+  Invoice invoice = 1;
+}
+
+message UpdateInvoiceResponse {
+  Invoice invoice = 1;
+}
+
+message DeleteInvoiceRequest {
+  string id = 1;
+}
+
+message DeleteInvoiceResponse {}
+
+message ListInvoicesRequest {}
+
+message ListInvoicesResponse {
+  repeated Invoice invoices = 1;
+}

@@ -1,0 +1,27 @@
+version: v1
+managed:
+  enabled: true
+  go_package_prefix:
+    default: github.com/nikola-enter21/wms/backend/api
+    except:
+      - buf.build/googleapis/googleapis
+      - buf.build/grpc-ecosystem/grpc-gateway
+      - buf.build/bufbuild/protovalidate
+plugins:
+  - plugin: buf.build/protocolbuffers/go:v1.32.0
+    out: api
+    opt:
+      - paths=source_relative
+  - plugin: buf.build/grpc/go:v1.3.0
+    out: api
+    opt:
+      - paths=source_relative
+  - plugin: buf.build/grpc-ecosystem/gateway:v2.19.0
+    out: api
+    opt:
+      - paths=source_relative
+  - plugin: buf.build/grpc-ecosystem/openapiv2:v2.19.0
+    out: api
+    opt:
+      - allow_merge=true
+      - merge_file_name=openapi
